@@ -1,10 +1,14 @@
 ai-bunker documentation
 =======================
 
-**ai-bunker** is a practical guide for running AI-assisted notebook work
-against protected HPC data. The main workflow starts JupyterLab on an HPC
-compute node, forwards it through an SSH tunnel, and connects from a local
-VS Code or Cursor notebook session.
+**ai-bunker** is a practical guide for running AI-assisted notebook
+development against protected `HPC <https://en.wikipedia.org/wiki/High-performance_computing>`__
+data. The main workflow starts an interactive environment like
+`JupyterLab <https://jupyterlab.readthedocs.io/>`__ or
+`RStudio <https://posit.co/products/open-source/rstudio/>`__ on an HPC compute
+node, forwards it through an `SSH <https://www.openssh.com/>`__ tunnel, and
+connects from a local IDE like `VS Code <https://code.visualstudio.com/>`__ or
+`Cursor <https://cursor.com/>`__.
 
 The key boundary is intentional: data and kernel execution stay on the HPC,
 while the workstation provides the editing experience and AI assistance.
