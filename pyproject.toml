@@ -3,6 +3,6 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "lumache"
-authors = [{name = "Graziella", email = "graziella@lumache"}]
+name = "jupyter-hpc"
+authors = [{name = "Bastien Hervé", email = "bastienherve61@gmail.com"}]
 dynamic = ["version", "description"]
