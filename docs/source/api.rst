@@ -4,4 +4,4 @@ API
 .. autosummary::
    :toctree: generated
 
-   jupyter-hpc
+   ai-bunker
