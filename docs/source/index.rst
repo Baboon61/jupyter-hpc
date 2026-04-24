@@ -18,7 +18,7 @@ Start here
 
 New users should begin with the end-to-end walkthrough:
 
-* :doc:`Run Jupyter on an HPC through an SSH tunnel <tutorials/hpc-jupyter-tunnel>`
+* :doc:`Run JupyterLab or RStudio on an HPC through an SSH tunnel <tutorials/hpc-jupyter-tunnel>`
 
 Background and command templates are available in the concept and reference
 sections.
