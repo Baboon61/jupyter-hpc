@@ -13,11 +13,11 @@ The workflow uses three layers:
 
 * **Workstation**: VS Code or Cursor opens notebooks and provides AI assistance.
 * **SSH tunnel**: a local port forwards browser and notebook traffic to the HPC.
-* **HPC compute node**: JupyterLab and the selected Python or R notebook kernel
+* **HPC compute node**: JupyterLab and the selected Python or R kernel
   run near the protected data.
 
 Notebook files can live in your local project if your workflow only stores code,
-queries, and non-sensitive outputs there. Any notebook that reads protected data
+queries, and non-sensitive outputs. Any notebook that reads protected data
 must run its code in a kernel on the HPC. In Jupyter, the kernel process opens
 files, imports packages, executes cell code, and resolves data paths. The local
 editor only sends code to that remote runtime.
@@ -29,10 +29,13 @@ Before starting, make sure you have:
 
 * SSH access to the HPC login node.
 * A SLURM partition that allows interactive or batch jobs.
-* ``uv`` available on the HPC.
+* ``uv`` available on the HPC for the JupyterLab server and uv-managed Python
+  kernels.
+* Conda, Mamba, or Micromamba available on the HPC for conda-managed Python or
+  R kernels.
 * VS Code or Cursor installed on the workstation with Jupyter support enabled.
-* A Python project with a ``pyproject.toml`` file, if you want a Python kernel.
-* R available on the HPC, if you want an R kernel.
+* A Python project with a ``pyproject.toml`` file, if you want a uv-managed
+  Python kernel.
 * Access to the HPC filesystem location that contains the protected data.
 
 The examples below use placeholders. Replace them for your site:
@@ -47,19 +50,23 @@ The examples below use placeholders. Replace them for your site:
    <local-port>       Port opened on the workstation, such as 8888
    <remote-port>      Port opened by JupyterLab on the HPC, such as 8888
 
-Prepare notebook kernels on the HPC
------------------------------------
+Prepare notebook environments on the HPC
+----------------------------------------
 
 Log in to the HPC and move to the project directory that will provide the
-runtime environment for the notebook kernels:
+runtime environment for the notebook work:
 
 .. code-block:: console
 
    $ ssh <hpc-login>
    $ cd <project-dir>
 
-Prepare a Python kernel with uv
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Choose how to create the Python environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use ``uv`` when the project already has, or should have, a Python
+``pyproject.toml``. This keeps dependencies project-scoped and makes it easy to
+reuse the same environment outside Jupyter:
 
 If the project is not already managed by ``uv``, initialize it or make sure it
 has a valid ``pyproject.toml``. Add the Jupyter kernel dependency to the project:
@@ -68,60 +75,73 @@ has a valid ``pyproject.toml``. Add the Jupyter kernel dependency to the project
 
    $ uv add --dev ipykernel
 
-Install a named kernel for the project:
+Use conda when your HPC site standardizes on conda environments, or when you
+want a named Python environment managed outside ``pyproject.toml``:
 
 .. code-block:: console
 
-   $ uv run ipython kernel install --user --name ai-bunker --display-name "Python (ai-bunker)"
+   $ conda create -n py-ai-bunker -c conda-forge python ipykernel pandas matplotlib
+   $ conda activate py-ai-bunker
 
-This registers a kernel specification that Jupyter can show in the notebook
-kernel picker. The kernel uses the project environment created by ``uv``.
+Create an R environment with conda and IRkernel
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Prepare an R kernel with IRkernel
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the R installation and package management pattern approved by your HPC
-site. Many clusters provide an R module or a project-local R library. For a
-module-based environment:
-
-.. code-block:: console
-
-   $ module avail R
-   $ module load R
-   $ R --version
-
-Create or use a project-local R library on the HPC, not on the workstation:
+For R notebooks, a conda environment is often the cleanest option because R,
+``IRkernel``, and compiled R package dependencies stay in one named environment.
+Use the conda-compatible tool approved by your HPC site. The examples below use
+``conda``; replace it with ``mamba`` or ``micromamba`` if that is your site's
+standard tool.
 
 .. code-block:: console
 
-   $ mkdir -p <project-dir>/renv/library
-   $ export R_LIBS_USER=<project-dir>/renv/library
-   $ R
+   $ conda create -n r-ai-bunker -c conda-forge r-base r-irkernel
+   $ conda activate r-ai-bunker
 
-Install ``IRkernel`` and any approved project packages into that HPC-side
-library:
-
-.. code-block:: r
-
-   install.packages("IRkernel", lib = Sys.getenv("R_LIBS_USER"))
-
-If the project uses ``renv``, restore the project environment from the HPC
-instead. Make sure ``IRkernel`` is included in the project environment before
-registering the kernel:
+Install any approved project packages into the same environment:
 
 .. code-block:: console
 
+   $ conda install -n r-ai-bunker -c conda-forge r-tidyverse
+
+If your project uses ``renv``, restore it from inside the conda environment.
+Make sure ``IRkernel`` remains available before registering the kernel:
+
+.. code-block:: console
+
+   $ conda activate r-ai-bunker
    $ R -e "renv::restore()"
 
-Register a named R kernel for Jupyter:
+Register environments as Jupyter kernels
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Jupyter discovers available runtimes through kernel specifications. Register
+each environment once, from the environment itself, with a short internal name
+and a readable display name.
+
+For a uv-managed Python environment:
 
 .. code-block:: console
 
+   $ cd <project-dir>
+   $ uv run ipython kernel install --user --name py-ai-bunker --display-name "Python (ai-bunker)"
+
+For a conda-managed Python environment:
+
+.. code-block:: console
+
+   $ conda activate py-ai-bunker
+   $ python -m ipykernel install --user --name py-ai-bunker --display-name "Python (ai-bunker)"
+
+For a conda-managed R environment:
+
+.. code-block:: console
+
+   $ conda activate r-ai-bunker
    $ R -e "IRkernel::installspec(name = 'r-ai-bunker', displayname = 'R (ai-bunker)', user = TRUE)"
 
-This registers an R kernel specification that Jupyter can show in the notebook
-kernel picker. Cells in notebooks that select ``R (ai-bunker)`` run in an R
-process on the HPC.
+These commands register kernel specifications that Jupyter can show in the
+notebook kernel picker. Cells run in whichever HPC-side environment backs the
+selected kernel.
 
 .. note::
 
@@ -219,33 +239,17 @@ Switch kernels in a notebook
 
 Each notebook can use a different registered kernel. Use the kernel picker in
 VS Code or Cursor to switch between Python and R, or between project
-environments. If you add a new Python project environment later, register
-another named kernel:
-
-.. code-block:: console
-
-   $ cd <project-dir>
-   $ uv add --dev ipykernel
-   $ uv run ipython kernel install --user --name <kernel-name> --display-name "Python (<kernel-name>)"
+environments. If you add another uv, conda, or R environment later, repeat the
+registration command from `Register environments as Jupyter kernels`_ with a new
+``--name`` or ``name`` value and a new display name.
 
 Restart Jupyter or refresh the kernel list if the new kernel does not appear.
-
-If you add a new R project environment later, load R from that environment and
-register another named IRkernel:
-
-.. code-block:: console
-
-   $ cd <project-dir>
-   $ module load R
-   $ export R_LIBS_USER=<project-dir>/renv/library
-   $ R -e "IRkernel::installspec(name = '<kernel-name>', displayname = 'R (<kernel-name>)', user = TRUE)"
-
-Restart Jupyter or refresh the kernel list if the new R kernel does not appear.
 
 Install packages intentionally
 ------------------------------
 
-For Python, prefer changing the project environment from a terminal on the HPC:
+For uv-managed Python kernels, prefer changing the project environment from a
+terminal on the HPC:
 
 .. code-block:: console
 
@@ -258,12 +262,28 @@ environment with care:
 
    $ uv pip install <package>
 
-For R kernels, install packages from an HPC terminal or from a notebook attached
-to the approved HPC R kernel:
+For conda-managed Python kernels, install packages into the named conda
+environment:
 
 .. code-block:: console
 
-   $ R -e "install.packages('<package>', lib = Sys.getenv('R_LIBS_USER'))"
+   $ conda install -n py-ai-bunker -c conda-forge <package>
+
+For R kernels, prefer installing packages into the conda environment from an HPC
+terminal:
+
+.. code-block:: console
+
+   $ conda install -n r-ai-bunker -c conda-forge r-<package>
+
+If a package is not available from the approved conda channels, follow your
+site's policy for installing R packages from inside the activated conda
+environment:
+
+.. code-block:: console
+
+   $ conda activate r-ai-bunker
+   $ R -e "install.packages('<package>')"
 
 Avoid ad hoc package installation from notebook cells unless your team has
 agreed that notebooks may mutate their execution environment.
