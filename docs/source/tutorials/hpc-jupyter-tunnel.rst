@@ -56,8 +56,8 @@ Prepare notebook kernels on the HPC
 Before starting JupyterLab, create the kernels that notebooks will use on the
 HPC. Choose the setup recipe that matches your project:
 
-* :doc:`Create a uv-managed Python kernel <../reference/install-uv-python-kernel>`
-* :doc:`Create conda-managed Python or R kernels <../reference/install-conda-kernels>`
+* :doc:`Create a uv-managed Python kernel </reference/install-uv-python-kernel>`
+* :doc:`Create conda-managed Python or R kernels </reference/install-conda-kernels>`
 
 The short version is:
 
@@ -363,6 +363,6 @@ If the expected kernel is missing, rerun the ``ipython kernel install`` command
 or the ``IRkernel::installspec`` command from the HPC project and refresh the
 Jupyter server connection.
 
-See :doc:`../reference/hpc-jupyter-commands` for reusable JupyterLab command
-templates and :doc:`../concepts/execution-boundaries` for the execution and
+See :doc:`/reference/hpc-jupyter-commands` for reusable JupyterLab command
+templates and :doc:`/concepts/execution-boundaries` for the execution and
 data boundary model.
