@@ -3,16 +3,17 @@ Run JupyterLab or RStudio on an HPC through an SSH tunnel
 
 This walkthrough shows how to run an interactive analysis tool such as
 JupyterLab or RStudio on a SLURM-managed HPC compute node, tunnel the server to
-a workstation, and connect from a local browser or IDE. The editor stays local,
-while code execution and protected data access happen on the HPC.
+a workstation, and connect from VS Code, Cursor, or the RStudio web interface.
+The editor stays local, while code execution and protected data access happen on
+the HPC.
 
 Architecture
 ------------
 
 The workflow uses three layers:
 
-* **Workstation**: a browser, VS Code, or Cursor provides the editing
-  interface and optional AI assistance.
+* **Workstation**: VS Code, Cursor, or the RStudio web interface provides the
+  editing interface and optional AI assistance.
 * **SSH tunnel**: a local port forwards browser, notebook, or RStudio traffic to
   the HPC.
 * **HPC compute node**: JupyterLab with the selected notebook kernel, or
@@ -221,10 +222,12 @@ The notebook file is edited locally, but cells run in the selected kernel on the
 HPC. Paths such as ``<data-dir>`` are resolved by the remote kernel, not by the
 workstation.
 
-Connect to RStudio from a browser
----------------------------------
+Connect to RStudio
+------------------
 
-Open a browser on the workstation and go to the forwarded URL:
+RStudio Server and Posit Workbench expose the RStudio IDE as a web application.
+Open the forwarded URL from the workstation, either in a normal browser or in an
+embedded browser view if your IDE provides one:
 
 .. code-block:: text
 
@@ -237,7 +240,12 @@ provided by your HPC documentation.
 
 R scripts, projects, package imports, and data paths are handled by the R
 session running on the HPC. Paths such as ``<data-dir>`` are resolved on the HPC
-filesystem, not by the workstation browser.
+filesystem, not by the workstation interface.
+
+If you want to work with R directly inside VS Code or Cursor instead of using
+the RStudio IDE, use your site's approved remote R or terminal workflow. That is
+a VS Code/Cursor R workflow, not an RStudio Server session, but the same rule
+applies: the R process that reads protected data must run on the HPC.
 
 Switch kernels in a notebook
 ----------------------------
