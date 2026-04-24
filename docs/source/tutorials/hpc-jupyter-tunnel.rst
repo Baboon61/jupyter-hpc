@@ -56,8 +56,8 @@ Prepare notebook kernels on the HPC
 Before starting JupyterLab, create the kernels that notebooks will use on the
 HPC. Choose the setup recipe that matches your project:
 
-* :doc:`/reference/install-uv-python-kernel`
-* :doc:`/reference/install-conda-kernels`
+:doc:`/reference/install-uv-python-kernel`
+:doc:`/reference/install-conda-kernels`
 
 The short version is:
 
