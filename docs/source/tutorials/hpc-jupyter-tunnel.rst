@@ -57,8 +57,29 @@ Before starting JupyterLab, create the kernels that notebooks will use on the
 HPC. For python centered kernels, please use ``uv``, for any other kernels like R, please use `conda` or `mamba`.
 The linked recipes show how to set up kernels for Python and R:
 
-* :doc:`/reference/install-uv-python-kernel`
-* :doc:`/reference/install-conda-kernels`
+.. grid:: 2
+
+   .. grid-item-card:: uv Python kernel
+      :link: /reference/install-uv-python-kernel.html
+
+      Create a Python kernel from a ``uv``-managed project and register it for
+      remote Jupyter use on the HPC.
+
+      Best for
+           :bdg-success:`Python projects`
+      Environment manager
+           :bdg-info:`uv`
+
+   .. grid-item-card:: conda Python or R kernels
+      :link: /reference/install-conda-kernels.html
+
+      Create Python or R kernels from conda environments when you need
+      compiled scientific packages or R support.
+
+      Best for
+           :bdg-success:`Python` :bdg-success:`R`
+      Environment manager
+           :bdg-info:`conda` :bdg-info:`mamba`
 
 .. note::
 
@@ -151,9 +172,9 @@ From inside the SLURM allocation, start JupyterLab without opening a browser:
              --port=<remote-port>
 
 .. note::
-   
+
    Jupyter prints a URL that includes a token. Keep the token private. Do not paste
-it into source files, shared tickets, commits, or chat logs.
+   it into source files, shared tickets, commits, or chat logs.
 
 Create the SSH tunnel from the workstation
 ------------------------------------------
