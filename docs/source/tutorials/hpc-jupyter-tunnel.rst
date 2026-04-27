@@ -62,16 +62,24 @@ The linked recipes show how to set up kernels for Python and R:
    .. grid-item-card:: uv Python kernel
       :link: /reference/install-uv-python-kernel.html
 
+      .. image:: /_static/uv-logo.svg
+         :alt: uv logo
+         :width: 120
+
       Create a Python kernel from a ``uv``-managed project and register it for
       remote Jupyter use on the HPC.
 
       Best for
-           :bdg-success:`Python projects`
+           :bdg-success:`Python`
       Environment manager
            :bdg-info:`uv`
 
    .. grid-item-card:: conda Python or R kernels
       :link: /reference/install-conda-kernels.html
+
+      .. image:: /_static/conda-logo.svg
+         :alt: conda logo
+         :width: 120
 
       Create Python or R kernels from conda environments when you need
       compiled scientific packages or R support.
