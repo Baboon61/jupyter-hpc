@@ -77,8 +77,7 @@ Through a terminal, log in to the HPC and move to the project directory:
 .. code-block:: console
 
    $ ssh <hpc-login>
-   $ cd <project-dir>
-   
+
 Start an interactive job for the JupyterLab server. The exact resource request
 depends on your HPC policy and workload:
 
@@ -99,6 +98,21 @@ After the allocation starts, identify the compute node:
 
 Keep this terminal open. The reported hostname is the node that the SSH tunnel
 must reach.
+
+.. note::
+
+   If your HPC workflow prefers batch submission, you can start the Jupyter
+   instance with ``sbatch`` instead of ``salloc``. See
+   :doc:`../reference/hpc-jupyter-commands` for a reusable batch job example.
+
+.. note::
+
+   This walkthrough uses `SLURM <https://slurm.schedmd.com/>`__ for concrete
+   examples. If your HPC uses another scheduler such as
+   `SGE <https://en.wikipedia.org/wiki/Oracle_Grid_Engine>`__ or
+   `HTCondor <https://htcondor.readthedocs.io/>`__, use the equivalent job
+   submission pattern from your local infrastructure manual and follow your
+   site's scheduler-specific guidance.
 
 Start JupyterLab on the compute node
 ------------------------------------
