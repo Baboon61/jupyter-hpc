@@ -71,10 +71,8 @@ The linked recipes show how to set up kernels for Python and R:
       Create a Python kernel from a ``uv`` managed project and register it for
       remote Jupyter use on the HPC.
 
-      Best for
-           :bdg-success:`Python`
-      Environment manager
-           :bdg-info:`uv`
+      Best for :bdg-success:`Python`
+      Environment manager :bdg-info:`uv`
 
    .. grid-item-card::
       :link: /reference/install-conda-kernels
@@ -88,10 +86,8 @@ The linked recipes show how to set up kernels for Python and R:
       Create Python or R kernels from ``conda`` managed project and register it
       for remote Jupyter use on the HPC.
 
-      Best for
-           :bdg-success:`Python` :bdg-success:`R`
-      Environment manager
-           :bdg-info:`conda` :bdg-info:`mamba`
+      Best for :bdg-success:`Python` :bdg-success:`R`
+      Environment manager :bdg-info:`conda` :bdg-info:`mamba`
 
 .. note::
 
