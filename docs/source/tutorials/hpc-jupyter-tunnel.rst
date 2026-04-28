@@ -66,13 +66,12 @@ The linked recipes show how to set up kernels for Python and R:
       .. image:: /_static/uv-logo.png
          :alt: uv logo
          :align: right
-         :width: 60
+         :width: 50
 
       Create a Python kernel from a ``uv`` managed project and register it for
       remote Jupyter use on the HPC.
 
       Best for :bdg-success:`Python`
-
       Environment manager :bdg-info:`uv`
 
    .. grid-item-card::
@@ -88,7 +87,6 @@ The linked recipes show how to set up kernels for Python and R:
       for remote Jupyter use on the HPC.
 
       Best for :bdg-success:`Python` :bdg-success:`R`
-      
       Environment manager :bdg-info:`conda` :bdg-info:`mamba`
 
 .. note::
@@ -192,24 +190,39 @@ Create the SSH tunnel from the workstation
 In a workstation terminal, forward a local port to the JupyterLab port on the
 HPC compute node. Many HPC systems require a jump through the login node:
 
-.. code-block:: console
+.. tabs::
 
-   $ ssh -N \
-       -L <local-port>:<compute-node>:<remote-port> \
-       <hpc-login>
+   .. tab:: Main method
 
-For example, if JupyterLab is listening on port ``8888`` on compute node
-``cn042``:
+      .. code-block:: console
 
-.. code-block:: console
+         $ ssh -N \
+            -L <local-port>:<compute-node>:<remote-port> \
+            <hpc-login>
 
-   $ ssh -N -L 8888:cn042:8888 login.cluster.example
+      For example, if JupyterLab is listening on port ``8888`` on compute node
+      ``cn042``:
 
-or
+      .. code-block:: console
 
-.. code-block:: console
-   
-   $ ssh -t -t login.cluster.example -L 8888:127.0.0.1:8888 ssh cn042 -L 8888:127.0.0.1:8888
+         $ ssh -N -L 8888:cn042:8888 login.cluster.example
+
+   .. tab::  Alternative method
+
+      .. code-block:: console
+
+         $ ssh -t \
+            -t <hpc-login> \
+            -L <local-port>:127.0.0.1:<remote-port> \
+            ssh <compute-node> \
+            -L <local-port>:127.0.0.1:<remote-port>
+            
+      For example, if JupyterLab is listening on port ``8888`` on compute node
+      ``cn042``:
+
+      .. code-block:: console
+
+         $ ssh -t -t login.cluster.example -L 8888:127.0.0.1:8888 ssh cn042 -L 8888:127.0.0.1:8888
 
 .. important::
 

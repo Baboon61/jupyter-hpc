@@ -13,10 +13,9 @@ or R kernels while keeping execution near the protected data.
 The key boundary is intentional: data and kernel execution stay on the HPC,
 while the workstation provides the editing experience and AI assistance.
 
-.. note::
+.. see also::
 
-   Background and command templates are available in the concepts and references
-sections.
+   Background and command templates are available in the concepts and references sections.
 
 .. warning::
 
