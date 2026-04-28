@@ -17,18 +17,41 @@ Install uv
 
 Use the official standalone installer from Astral:
 
-.. code-block:: console
+.. tabs::
 
-   $ curl -LsSf https://astral.sh/uv/install.sh | sh
+   .. tab:: curl
 
-If ``curl`` is not available, use ``wget``:
+      .. code-block:: console
 
-.. code-block:: console
+         $ curl -LsSf https://astral.sh/uv/install.sh | sh
 
-   $ wget -qO- https://astral.sh/uv/install.sh | sh
+   .. tab:: wget
 
-Restart the shell, source the profile file updated by the installer, or add the
-reported install directory to ``PATH``. Then confirm ``uv`` is available:
+      .. code-block:: console
+
+         $ wget -qO- https://astral.sh/uv/install.sh | sh
+
+After the installer finishes, the ``uv`` executable may not be visible in the
+current shell yet. The installer usually prints the directory where it placed
+``uv`` and may also update a shell startup file such as ``~/.bashrc``,
+``~/.bash_profile``, or ``~/.zshrc``.
+
+Use one of these options before continuing:
+
+* Start a new login shell by logging out and back in to the HPC, or by opening
+  a new terminal session.
+* Reload the updated shell profile in the current session, for example:
+
+  .. code-block:: console
+
+     $ source ~/.bashrc
+
+  If your site uses another shell, source the startup file for that shell
+  instead.
+* If the installer printed a directory that contains the ``uv`` binary, add it
+  to ``PATH`` for the current session before testing the command.
+
+Then confirm that ``uv`` is available:
 
 .. code-block:: console
 
