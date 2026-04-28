@@ -60,9 +60,10 @@ The linked recipes show how to set up kernels for Python and R:
 .. grid:: 2
 
    .. grid-item-card:: uv Python kernel
-      :link: /reference/install-uv-python-kernel.rst
+      :link: /reference/install-uv-python-kernel
+      :link-type: doc
 
-      .. image:: /_static/uv-logo.svg
+      .. image:: /static/uv-logo.png
          :alt: uv logo
          :width: 120
 
@@ -75,9 +76,10 @@ The linked recipes show how to set up kernels for Python and R:
            :bdg-info:`uv`
 
    .. grid-item-card:: conda Python or R kernels
-      :link: /reference/install-conda-kernels.rst
+      :link: /reference/install-conda-kernels
+      :link-type: doc
 
-      .. image:: /_static/conda-logo.svg
+      .. image:: /static/conda-logo.png
          :alt: conda logo
          :width: 120
 
